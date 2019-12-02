@@ -1,3 +1,5 @@
+module Basic where
+
 data Move = Rock | Paper | Scissors
      deriving (Eq, Read, Show, Enum, Bounded)
 
@@ -10,3 +12,8 @@ outcome Rock Scissors = Win
 outcome us them 
     | us == them = Tie
     | otherwise = Lose
+
+parseMove :: String -> Maybe Move
+parseMove s = case reads s of
+    [(a, _)] -> Just a
+    _ -> Nothing
