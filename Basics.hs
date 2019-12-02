@@ -14,6 +14,6 @@ outcome us them
     | otherwise = Lose
 
 parseMove :: String -> Maybe Move
-parseMove s = case reads s of
-    [(a, _)] -> Just a
-    _ -> Nothing
+parseMove str | [(m, rest)] <- reads str, ok rest = Just m
+              | otherwise                         = Nothing
+    where ok = all (`elem` " \r\n")
