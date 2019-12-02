@@ -1,9 +1,10 @@
 module Main where
 import System.IO
 
-greet h = do
-  hPutStrLn h "What is your name?"
-  hGetLine h >>= hPutStrLn h . ("Hi, " ++)
+-- Desugared version of original greet:
+greet h = hPutStrLn h "What is your name?" >>= \_ ->
+  hGetLine h >>= \name ->
+  hPutStrLn h ("Hi, " ++ name)
 
 withTty = withFile "/dev/tty" ReadWriteMode
 
