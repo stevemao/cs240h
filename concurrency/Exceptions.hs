@@ -15,5 +15,4 @@ pureCatcher a = (a `seq` return (Just a))
                 `catch` \(SomeException _) -> return Nothing
 
 seqList :: [a] -> b -> b
-seqList [] = id
-seqList (a : as) = seq a . seqList as
+seqList = flip . foldl . flip $ seq
