@@ -1,6 +1,6 @@
 module Utils where
 
-repeatFinalChar :: Int -> String -> String
-repeatFinalChar n as = case reverse as of
-    (a : _) -> as ++ replicate n a
+repeatFinalChar :: String -> String
+repeatFinalChar as = case reverse as of
+    (a : _) -> as ++ repeat a
     [] -> as

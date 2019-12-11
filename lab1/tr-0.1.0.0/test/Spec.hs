@@ -30,6 +30,10 @@ main = hspec $ describe "Testing tr" $ do
       it "a -> b" $
         tr' "a" "b" "aaaa" `shouldBe` "bbbb"
 
+    describe "more than one input set" $
+      it "abc -> def" $
+        tr' "abc" "def" "abcd" `shouldBe` "defd"
+  
     describe "extend input set" $
       it "abc -> d" $
         tr' "abc" "d" "abcd" `shouldBe` "dddd"

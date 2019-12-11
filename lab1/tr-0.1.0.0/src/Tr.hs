@@ -38,22 +38,23 @@ type CharSet = String
 -- It's up to you how to handle the first argument being the empty string, or
 -- the second argument being `Just ""`, we will not be testing this edge case.
 tr :: CharSet -> Maybe CharSet -> String -> String
-tr (ii : iis) (Just (o : os)) xs = case parse parser (listh xs) of
+tr iis (Just os) xs = case parse parser (listh xs) of
                                     Result input a -> hlist a
                                     _ -> "Error!!"
-        where parser = list $ rep ii o ||| character
-              rep a b = const b Course.Functor.<$> is a
-tr (ii : iis) Nothing xs = case parse parser (listh xs) of
+        where parser = list $ anyParser rep ts ||| character
+              ts = Course.List.zip (listh iis) (listh (repeatFinalChar os))
+              rep (a, b) = const b Course.Functor.<$> is a
+tr iis Nothing xs = case parse parser (listh xs) of
                             Result input a -> hlist a
                             _ -> "Error!!"
-        where parser = rep ii ||| list character
-              rep a = list1 (is a) Course.Applicative.*> (parser ||| eos)
-tr _ (Just "") _ = ""
-tr [] _ xs = xs
-tr _ _ "" = ""
+        where parser = anyParser remo (listh iis) ||| list character
+              remo a = list1 (is a) Course.Applicative.*> (parser ||| eos)
 
 eos ::
   Parser Chars
 eos = P p
     where p "" = Result "" ""
           p a = UnexpectedString a
+
+anyParser :: (a -> Parser b) -> List a -> Parser b
+anyParser p ls = foldRight (\curr acc -> p curr ||| acc) (unexpectedStringParser "") ls
