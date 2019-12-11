@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 -- | Haskell tr implementation. Just supports the swap and delete modes:
 -- * tr string1 string2
 -- * tr -d string1
@@ -10,7 +11,10 @@ module Tr
     ) where
 
 import Course.Parser
-import Course.MoreParser
+import Course.List
+import Course.Functor
+import Course.Applicative
+import Utils
 
 -- | Just to give `tr` a more descriptive type
 type CharSet = String
@@ -34,5 +38,22 @@ type CharSet = String
 -- It's up to you how to handle the first argument being the empty string, or
 -- the second argument being `Just ""`, we will not be testing this edge case.
 tr :: CharSet -> Maybe CharSet -> String -> String
-tr _inset Nothing xs = xs
+tr (ii : iis) (Just (o : os)) xs = case parse parser (listh xs) of
+                                    Result input a -> hlist a
+                                    _ -> "Error!!"
+        where parser = list $ rep ii o ||| character
+              rep a b = const b Course.Functor.<$> is a
+tr (ii : iis) Nothing xs = case parse parser (listh xs) of
+                            Result input a -> hlist a
+                            _ -> "Error!!"
+        where parser = rep ii ||| list character
+              rep a = list1 (is a) Course.Applicative.*> (parser ||| eos)
+tr _ (Just "") _ = ""
+tr [] _ xs = xs
+tr _ _ "" = ""
 
+eos ::
+  Parser Chars
+eos = P p
+    where p "" = Result "" ""
+          p a = UnexpectedString a

@@ -22,6 +22,20 @@ library
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
   ghc-options:         -Wall
+  other-modules:
+    Course.Applicative
+    Course.Compose
+    Course.Core
+    Course.ExactlyOne
+    Course.Functor
+    Course.List
+    Course.Monad
+    Course.MoreParser
+    Course.Optional
+    Course.Parser
+    Course.Person
+    Course.Traversable
+    Utils
 
 executable tr-exe
   hs-source-dirs:      app
