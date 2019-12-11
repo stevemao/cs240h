@@ -9,6 +9,9 @@ module Tr
     , tr
     ) where
 
+import Course.Parser
+import Course.MoreParser
+
 -- | Just to give `tr` a more descriptive type
 type CharSet = String
 
@@ -31,5 +34,5 @@ type CharSet = String
 -- It's up to you how to handle the first argument being the empty string, or
 -- the second argument being `Just ""`, we will not be testing this edge case.
 tr :: CharSet -> Maybe CharSet -> String -> String
-tr _inset _outset xs = xs
+tr _inset Nothing xs = xs
 
