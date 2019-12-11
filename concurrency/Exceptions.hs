@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
-
+module Exceptions where
 import Control.Exception
 import Data.Typeable
+import System.IO.Error
 
 data MyError = MyError String deriving (Show, Typeable)
 instance Exception MyError
@@ -16,3 +17,6 @@ pureCatcher a = (a `seq` return (Just a))
 
 seqList :: [a] -> b -> b
 seqList = flip . foldl . flip $ seq
+
+readFileIfExists f = catchJust p (readFile f) (\_ -> return "")
+  where p e = if isDoesNotExistError e then Just e else Nothing
