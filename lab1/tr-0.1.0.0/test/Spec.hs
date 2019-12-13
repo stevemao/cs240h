@@ -64,17 +64,17 @@ main = hspec $ describe "Testing tr" $ do
 
 -- | An example QuickCheck test. Tests the invariant that `tr` with an empty
 -- input string should produce and empty output string.
-prop_empty_id :: CharSet' -> CharSet' -> Bool
+prop_empty_id :: CharSet' -> CharSet' -> Property
 prop_empty_id (NonEmpty set1) (NonEmpty set2)
-  = tr' set1 set2 "" == ""
+  = tr' set1 set2 "" === ""
 
-prop_non_empty_length :: CharSet' -> CharSet' -> CharSet' -> Bool
+prop_non_empty_length :: CharSet' -> CharSet' -> CharSet' -> Property
 prop_non_empty_length (NonEmpty set1) (NonEmpty set2) (NonEmpty str)
-  = length (tr' set1 set2 str) == length str
+  = length (tr' set1 set2 str) === length str
 
-prop_empty_id_delete :: CharSet' -> Bool
+prop_empty_id_delete :: CharSet' -> Property
 prop_empty_id_delete (NonEmpty set1)
-  = tr'' set1 "" == ""
+  = tr'' set1 "" === ""
 
 prop_non_empty_delete :: CharSet' -> CharSet' -> Bool
 prop_non_empty_delete (NonEmpty set1) (NonEmpty str)
